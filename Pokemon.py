@@ -23,3 +23,26 @@ with open('pokemon.json') as f:
         count += 1
     pprint(approvedPokemon)
     print(len(approvedPokemon))
+
+def findPokemon(pokedex, rating,height,weight):
+    reb = rating[0]
+    end = rating[0]
+    str = rating[0]
+    ft = rating[0]
+    off = rating[0]
+    fg = rating[0]
+    defs = rating[0]
+    tp = rating[0]
+    dnk = rating[0]
+    drb = rating[0]
+    spe = rating[0]
+    jmp = rating[0]
+    healthPoints = int((str+end +reb)/3)
+    attack = int(off+fg + ft)/3
+    deffense = int((weight+defs)/2)
+    specialAttack = int((tp+height+dnk)/3)
+    speed = int((spe+end+drb)/3)
+    specialDefense = int((str+jmp)/2)
+
+
+
