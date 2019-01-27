@@ -28,7 +28,12 @@ with open('players.json') as f:
     players = json.load(f)['players']
     for x in players:
         try:
+            playerName = x['name']
+            playerWeight = x['weight']
+            playerHeight = x['hgt']
+            playerRatings = x['ratings']
             pprint("Name: " + x['name'] + " Weight: " + str(x['weight']) + " Height: " + str(x['hgt']))
+            pprint("Ratings: " + str(x['ratings']))
         except:
             pass
 
