@@ -14,12 +14,18 @@ def makePokemon(rating,height,weight):
     drb = rating[0]["drb"]
     spe = rating[0]["spd"]
     jmp = rating[0]["jmp"]
-    healthPoints = str*end*weight
-    attack = off*fg*ft
-    deffense = weight*defs*spe
-    specialAttack = tp*height*dnk
-    speed = spe*end*drb
-    specialDefense = str*jmp*reb
+    healthPoints = (str*end*weight)**(1/2.6)
+    attack = ((off*fg*height))**(1/2.5)
+    deffense = ((weight*defs*spe))**(1/2.5)
+    if(tp == 0):
+        tp = 10
+    if(ft == 0):
+        ft = 15
+    if(dnk == 0):
+        dnk = 10
+    specialAttack = (tp*ft*dnk)**(1/2.5)
+    speed = (spe*end*drb)**(1/2.5)
+    specialDefense = (str*jmp*reb)**(1/2.5)
     return {"hp" : healthPoints,
             "atk" : attack,
             "def" : deffense,
@@ -55,43 +61,26 @@ def adjStats(givenPlayerStats):
         "tot": 0,
     }
 
-    nbaHp = 7984 - 1200
-    nbaAtk = 6835 - 2520
-    nbaDef = 17514 - 5320
-    nbaSpa = 7217 - 2500
-    nbaSpd = 8075 - 2420
-    nbaSpe = 567567 - 267267
-    hpLow = 1200
-    atkLow = 2520
-    defLow = 5320
-    spaLow = 2500
-    spdLow = 2420
-    speLow = 267267
-    pokeHp = 254
-    pokeAtk = 185
-    pokeDef = 230
-    pokeSpa = 188
-    pokeSpd = 224
-    pokeSpe = 175
+    stats = getStats()
 
-    lows = {"hp": hpLow,
-            "atk": atkLow,
-            "def": defLow,
-            "spa": spaLow,
-            "spd": spdLow,
-            "spe": speLow,
-            }
+    NBAHIGH = getMaxNBA()
+    NBALOW = getMinNBA()
+    POKEHIGH = getMaxPoke()
+    POKELOW = getMinPoke()
 
-    slopes = {"hp": nbaHp / pokeHp,
-              "atk": nbaAtk / pokeAtk,
-              "def": nbaDef / pokeDef,
-              "spa": nbaSpa / pokeSpa,
-              "spd": nbaSpd / pokeSpd,
-              "spe": nbaSpe / pokeSpe,
+    slopes = {"hp": 0,
+              "atk": 0,
+              "def": 0,
+              "spa": 0,
+              "spd": 0,
+              "spe": 0,
               }
 
+    for stat in stats:
+        slopes[stat] = (NBAHIGH[stat] - NBALOW[stat]) / (POKEHIGH[stat] - POKELOW[stat])
+
     for i in givenPlayerStats:
-        adj = int((givenPlayerStats[i] - lows[i]) / slopes[i])
+        adj = int((givenPlayerStats[i] - NBALOW[i]) / slopes[i])
         aStats[i] = adj
     total = 0
     for j in aStats:
@@ -99,8 +88,13 @@ def adjStats(givenPlayerStats):
     aStats["tot"] = total
     return aStats
 
+
+def getStats():
+    return ["hp", "atk", "def", "spa", "spd", "spe"]
+
+
 def getMaxNBA():
-    stats = {"hp": 0,
+    maxStats = {"hp": 0,
             "atk": 0,
             "def": 0,
             "spa": 0,
@@ -108,62 +102,112 @@ def getMaxNBA():
             "spe": 0,
             }
 
+    with open('players.json') as f:
+        players = json.load(f)['players']
+        for x in players:
+            playerWeight = x['weight']
+            playerHeight = x['hgt']
+            playerRatings = x['ratings']
+            stats = makePokemon(playerRatings, playerHeight, playerWeight)
+            for stat in getStats():
+                if stats[stat] > maxStats[stat]:
+                    maxStats[stat] = stats[stat]
+    return maxStats
+print("MAX: " + str(getMaxNBA()))
+
+def getMinNBA():
+    minStats = {"hp": 9999999999999990,
+                "atk": 9999999999999990,
+                "def": 9999999999999990,
+                "spa": 9999999999999990,
+                "spd": 9999999999999990,
+                "spe": 9999999999999990,
+                }
+
+    with open('players.json') as f:
+        players = json.load(f)['players']
+        for x in players:
+            playerWeight = x['weight']
+            playerHeight = x['hgt']
+            playerRatings = x['ratings']
+            stats = makePokemon(playerRatings, playerHeight, playerWeight)
+            for stat in getStats():
+                if stats[stat] < minStats[stat]:
+                    minStats[stat] = stats[stat]
+    return minStats
 
 
-# def getMinNBA():
+print("MIN: " + str(getMinNBA()))
 
 
-# def getMinPoke():
+def getMaxPoke():
+    maxStats = {"hp": 0,
+                "atk": 0,
+                "def": 0,
+                "spa": 0,
+                "spd": 0,
+                "spe": 0,
+                }
+
+    with open('pokemon.json') as f:
+        pokedex = json.load(f)
+        count = 0
+        for pokemon in pokedex:
+            if count <=1008:
+                for stat in getStats():
+                    if pokedex[pokemon]['baseStats'][stat] > maxStats[stat]:
+                        maxStats[stat] = pokedex[pokemon]['baseStats'][stat]
+    return maxStats
 
 
+print("MAX: " + str(getMaxPoke()))
 
-# def getMaxPoke():
+
+def getMinPoke():
+    minStats = {"hp": 9999,
+                "atk": 9999,
+                "def": 9990,
+                "spa": 9990,
+                "spd": 9990,
+                "spe": 9990,
+                }
+
+    with open('pokemon.json') as f:
+        pokedex = json.load(f)
+        count = 0
+        for pokemon in pokedex:
+            if count <= 1008:
+                for stat in getStats():
+                    if pokedex[pokemon]['baseStats'][stat] < minStats[stat]:
+                        minStats[stat] = pokedex[pokemon]['baseStats'][stat]
+    return minStats
 
 
-def getStats():
-    return ["hp", "atk", "def", "spa", "spd", "spa"]
+print("MIN: " + str(getMinPoke()))
 
 
 def topThree(givenPlayerName):
     with open('pokemon.json') as f:
         pokedex = json.load(f)
 
-    nbaHp = 7984-1200
-    nbaAtk = 6835-2520
-    nbaDef = 17514 - 5320
-    nbaSpa = 7217-2500
-    nbaSpd = 8075-2420
-    nbaSpe = 567567 - 267267
-    hpLow = 1200
-    atkLow = 2520
-    defLow = 5320
-    spaLow = 2500
-    spdLow = 2420
-    speLow = 267267
-    pokeHp = 254
-    pokeAtk = 185
-    pokeDef = 230
-    pokeSpa = 188
-    pokeSpd = 224
-    pokeSpe = 175
 
     stats = getStats()
 
-    lows = {"hp" : hpLow,
-            "atk": atkLow,
-            "def": defLow,
-            "spa": spaLow,
-            "spd": spdLow,
-            "spe": speLow,
+    NBAHIGH = getMaxNBA()
+    NBALOW = getMinNBA()
+    POKEHIGH = getMaxPoke()
+    POKELOW = getMinPoke()
+
+    slopes = {"hp" : 0,
+            "atk": 0,
+            "def": 0,
+            "spa": 0,
+            "spd": 0,
+            "spe": 0,
     }
 
-    slopes = {"hp" : nbaHp/pokeHp,
-            "atk": nbaAtk/pokeAtk,
-            "def": nbaDef/pokeDef,
-            "spa": nbaSpa/pokeSpa,
-            "spd": nbaSpd/pokeSpd,
-            "spe": nbaSpe/pokeSpe,
-    }
+    for stat in stats:
+        slopes[stat] = (NBAHIGH[stat]-NBALOW[stat])/(POKEHIGH[stat]-POKELOW[stat])
 
     count = 0
     minDif = [9999999999, "name"]
@@ -174,7 +218,7 @@ def topThree(givenPlayerName):
         if count <= 1008:
             squaredDiff = 0
             for stat in stats:
-                adj = (playerStatsats[stat] - lows[stat]) / slopes[stat]
+                adj = (playerStatsats[stat] - NBALOW[stat]) / slopes[stat]
                 squaredDiff += (adj - pokedex[pokemon]['baseStats'][stat])**2
                 #if best
             if squaredDiff < minList[0][0]:
@@ -195,6 +239,6 @@ def topThree(givenPlayerName):
     ret.append(minList[2][1])
     return ret
 
-givenName = "Nikola Jokic"
+givenName = "Trey Lyles"
 print(topThree(givenName))
 print(adjStats(playerStats(givenName)))
