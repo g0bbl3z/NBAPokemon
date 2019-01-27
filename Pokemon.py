@@ -101,7 +101,7 @@ def getMaxNBA():
             "spe": 0,
             }
 
-    with open('players.json') as f:
+    with open('players.json', encoding="utf-8") as f:
         players = json.load(f)['players']
         for x in players:
             playerWeight = x['weight']
@@ -123,7 +123,7 @@ def getMinNBA():
                 "spe": 9999999999999990,
                 }
 
-    with open('players.json') as f:
+    with open('players.json', encoding="utf-8") as f:
         players = json.load(f)['players']
         for x in players:
             playerWeight = x['weight']
@@ -146,7 +146,7 @@ def getMaxPoke():
                 "spe": 0,
                 }
 
-    with open('pokemon.json') as f:
+    with open('pokemon.json', encoding="utf-8") as f:
         pokedex = json.load(f)
         count = 0
         for pokemon in pokedex:
@@ -166,7 +166,7 @@ def getMinPoke():
                 "spe": 9990,
                 }
 
-    with open('pokemon.json') as f:
+    with open('pokemon.json', encoding="utf-8") as f:
         pokedex = json.load(f)
         count = 0
         for pokemon in pokedex:
