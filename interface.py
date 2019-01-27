@@ -3,6 +3,7 @@ from PokemonChoose import getPokemonAdjusted, getPokemon
 
 approvedPokemon = []
 dynamic_sprites = []
+dynamic_labels = []
 
 def getPokemans():
 
@@ -20,21 +21,30 @@ def getPokemans():
 
     i = 0
     while i < len(approvedPokemon):
-        tk.Label(master, text = approvedPokemon[i]).grid(row=7+i,column=0)
+        label = tk.Label(master, text = approvedPokemon[i]).grid(row=7+i,column=0)
+        dynamic_labels.append(label)
         sprite = tk.PhotoImage(file=("sprites/"+approvedPokemon[i]+".png"))
         dynamic_sprites.append(sprite)
         tk.Label(master, image=dynamic_sprites[i]).grid(row=7+i,column=1)
         i+=1
 
     # tk.Label(master, text=approvedPokemon).grid(row = 5)
-
     return
+
+def clearPics():
+    j = 0
+    quantity = len(dynamic_sprites)
+    while j < quantity:
+        dynamic_sprites[j].destroy()
+        dynamic_labels[j].destroy()
+        j+=1
 
 master = tk.Tk()
 
 choice = tk.IntVar()
 tk.Label(master,
-        text="""Enter your weight and height or Enter the name of an NBA Player!""",
+        text="""Enter your weight and height or Enter the name of an NBA Player!\nWe will compare you or an NBA Player to a Pokemon!
+        \nYou are anlayzed just by height and weight, but NBA players are analyzed by their basketball stats as well!""",
         justify = tk.LEFT,
         padx = 20).grid(row=0)
 
@@ -72,5 +82,6 @@ e3.grid(row=3, column=1)
 
 tk.Button(master, text='Quit', command=master.quit).grid(row=5, column=1, sticky=tk.W, pady=4)
 tk.Button(master, text='Calculate', command=getPokemans).grid(row=4, column=1, sticky=tk.W, pady=4)
+tk.Button(master, text='Clear', command=clearPics).grid(row=5, column=2, sticky=tk.E, pady=4)
 
 tk.mainloop()
