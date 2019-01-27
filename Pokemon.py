@@ -1,5 +1,4 @@
 import json
-import random
 from pprint import pprint
 
 #POKEMON
@@ -27,7 +26,7 @@ def makePokemon(rating,height,weight):
     jmp = rating[0]["jmp"]
     healthPoints = str*end + reb
     attack = off*fg + ft
-    deffense = weight*defs
+    deffense = weight*defs + spe
     specialAttack = tp*height + dnk
     speed = spe*end*drb
     specialDefense = str*jmp
@@ -47,47 +46,24 @@ def makePokemon(rating,height,weight):
 #spd 2420 8075
 #spe 267267 567567
 
-with open('players.json') as f:
-    players = json.load(f)['players']
-    for x in players:
-        try:
-            playerName = x['name']
-            playerWeight = x['weight']
-            playerHeight = x['hgt']
-            playerRatings = x['ratings']
-            # pprint("Name: " + x['name'] + " Weight: " + str(x['weight']) + " Height: " + str(x['hgt']))
-            # pprint("Ratings: " + str(x['ratings']))
-            poke = makePokemon(playerRatings, playerHeight, playerWeight)
-            if poke > maxValue:
-                maxValue = poke
-                maxPlayer = playerName
-            if poke < minValue:
-                minValue = poke
-                minPlayer = playerName
-        except:
-            pass
 
 def playerStats(givenName):
     with open('players.json') as f:
         players = json.load(f)['players']
         for x in players:
-            # if(x['name'] ==)
-            try:
-                playerName = x['name']
+            if('firstName' in x):
+                playerName = x['firstName'] + x['lastName']
+            else:
+                playerName = str(x['name'])
+            if(playerName == givenName):
+
                 playerWeight = x['weight']
                 playerHeight = x['hgt']
                 playerRatings = x['ratings']
                 # pprint("Name: " + x['name'] + " Weight: " + str(x['weight']) + " Height: " + str(x['hgt']))
                 # pprint("Ratings: " + str(x['ratings']))
-                poke = makePokemon(playerRatings, playerHeight, playerWeight)
-                if poke > maxValue:
-                    maxValue = poke
-                    maxPlayer = playerName
-                if poke < minValue:
-                    minValue = poke
-                    minPlayer = playerName
-            except:
-                pass
+                return makePokemon(playerRatings, playerHeight, playerWeight)
+
 
 nbaHp = 7984-1200
 nbaAtk = 6835-2520
@@ -95,12 +71,27 @@ nbaDef = 17514 - 5320
 nbaSpa = 7217-2500
 nbaSpd = 8075-2420
 nbaSpe = 567567 - 267267
+hpLow = 1200
+atkLow = 2520
+defLow = 5320
+spaLow = 2500
+spdLow = 2420
+speLow = 267267
 pokeHp = 254
 pokeAtk = 185
 pokeDef = 230
 pokeSpa = 188
 pokeSpd = 224
 pokeSpe = 175
+
+lows = {"hp" : hpLow,
+        "atk": atkLow,
+        "def": defLow,
+        "spa": spaLow,
+        "spd": spdLow,
+        "spe": speLow,
+}
+
 slopes = {"hp" : nbaHp/pokeHp,
         "atk": nbaAtk/pokeAtk,
         "def": nbaDef/pokeDef,
@@ -109,14 +100,58 @@ slopes = {"hp" : nbaHp/pokeHp,
         "spe": nbaSpe/pokeSpe,
 }
 
-possiblePokemon = []
-percent = 100
-while len(possiblePokemon) > 5 and len(possiblePokemon) != 0:
-    with open('pokemon.json') as f:
-        pokedex = json.load(f)
-        count = 0
-        for pokemon in pokedex:
-            if count <= 1008:
-                for stat in stats:
-                    a
-            count += 1
+# possiblePokemon = []
+# percent = 1
+with open('pokemon.json') as f:
+    pokedex = json.load(f)
+
+# while len(possiblePokemon) > 5 or len(possiblePokemon) == 0:
+count = 0
+minDif = [9999999999, "name"]
+minList = [minDif,minDif,minDif]
+givenName = "Stephen Curry"
+playerStats = playerStats(givenName)
+
+for pokemon in pokedex:
+    if count <= 1008:
+        squaredDiff = 0
+        for stat in stats:
+            adj = (playerStats[stat] - lows[stat]) / slopes[stat]
+            squaredDiff += (adj - pokedex[pokemon]['baseStats'][stat])**2
+            #if best
+        if squaredDiff < minList[0][0]:
+            print(squaredDiff)
+            minList[2] = minList[1]
+            minList[1] = minList[0]
+            minList[0] = [squaredDiff, pokemon]
+            #if 2nd
+        elif squaredDiff < minList[1][0]:
+            print(squaredDiff)
+            minList[2] = minList[1]
+            minList[1] = [squaredDiff, pokemon]
+            #if 3rd
+        elif squaredDiff < minList[2][0]:
+            print(squaredDiff)
+            minList[2] = [squaredDiff, pokemon]
+    print("Test")
+    count += 1
+
+def adjStats():
+    aStats = {"hp" : 0,
+        "atk": 0,
+        "def": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 0,
+        "tot": 0,
+    }
+    for i in playerStats:
+        adj = int((playerStats[i] - lows[i]) / slopes[i])
+        aStats[i] = adj
+    total = 0
+    for j in aStats:
+        total += aStats[j]
+    aStats["tot"] = total
+    return aStats
+pprint(minList)
+print(adjStats())
