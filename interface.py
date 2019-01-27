@@ -24,8 +24,8 @@ def getPokemans():
 
     i = 0
     while i < len(approvedPokemon):
-        label = tk.Label(master, text = approvedPokemon[i]).grid(row=7+i,column=0)
-        dynamic_labels.append(label)
+
+        dynamic_labels.append(tk.Label(master, text = approvedPokemon[i]).grid(row=7+i,column=0))
         sprite = tk.PhotoImage(file=("sprites/"+approvedPokemon[i]+".png"))
         dynamic_sprites.append(sprite)
         tk.Label(master, image=dynamic_sprites[i]).grid(row=7+i,column=1)
@@ -38,9 +38,11 @@ def clearPics():
     j = 0
     quantity = len(dynamic_sprites)
     while j < quantity:
-        dynamic_sprites[j].destroy()
         dynamic_labels[j].destroy()
         j+=1
+
+def delete():
+    test.place_forget()
 
 master = tk.Tk()
 
@@ -85,6 +87,6 @@ e3.grid(row=3, column=1)
 
 tk.Button(master, text='Quit', command=master.quit).grid(row=5, column=1, sticky=tk.W, pady=4)
 tk.Button(master, text='Calculate', command=getPokemans).grid(row=4, column=1, sticky=tk.W, pady=4)
-tk.Button(master, text='Clear', command=clearPics).grid(row=5, column=2, sticky=tk.E, pady=4)
+tk.Button(master, text='Clear', command=delete).grid(row=5, column=2, sticky=tk.E, pady=4)
 
 tk.mainloop()
