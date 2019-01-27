@@ -1,9 +1,11 @@
 import tkinter as tk
 from PokemonChoose import getPokemonAdjusted, getPokemon
+from Pokemon import playerStats, adjStats, topThree
 
 approvedPokemon = []
 dynamic_sprites = []
 dynamic_labels = []
+playerPokeStats = []
 
 def getPokemans():
 
@@ -17,7 +19,8 @@ def getPokemans():
             approvedPokemon = getPokemonAdjusted(weight,height)
     elif (e3.get() != ""):
         #Do all the stuff regarding the nba stats, call the zeke method and allself.
-        print()
+        approvedPokemon = topThree(e3.get())
+        # playerPokeStats = adjStats(playerStats(e3.get()))
 
     i = 0
     while i < len(approvedPokemon):
