@@ -1,14 +1,28 @@
 import tkinter as tk
-from Pokemon import getPokemonAdjusted, getPokemon
+from PokemonChoose import getPokemonAdjusted, getPokemon
+
+approvedPokemon = []
+dynamic_sprites = []
 
 def getPokemans():
     weight = float(e1.get())/2.205
     height = float(e2.get())/39.37
 
     if choice.get() == 2:
-        getPokemon(weight, height)
+        approvedPokemon = getPokemon(weight, height)
     elif choice.get() == 1:
-        getPokemonAdjusted(weight,height)
+        approvedPokemon = getPokemonAdjusted(weight,height)
+
+    i = 0
+    while i < len(approvedPokemon):
+        tk.Label(master, text = approvedPokemon[i]).grid(row=6+i,column=0)
+        sprite = tk.PhotoImage(file=("sprites/"+approvedPokemon[i]+".png"))
+        dynamic_sprites.append(sprite)
+        tk.Label(master, image=dynamic_sprites[i]).grid(row=6+i,column=1)
+        i+=1
+
+    # tk.Label(master, text=approvedPokemon).grid(row = 5)
+
     return
 
 master = tk.Tk()
@@ -30,6 +44,10 @@ tk.Radiobutton(master,
               variable=choice,
               value=2).grid(row=3)
 
+logo = tk.PhotoImage(file="pokeball_sprite.png")
+logo = logo.subsample(8)
+
+logoImg = tk.Label(master, image=logo).grid(row=1, column=2)
 
 tk.Label(master, text="Weight (lb)").grid(row=1)
 tk.Label(master, text="Height (in)").grid(row=2)
