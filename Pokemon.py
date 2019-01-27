@@ -42,7 +42,7 @@ def playerStats(givenName):
                 playerName = x['firstName'] + x['lastName']
             else:
                 playerName = str(x['name'])
-            if(playerName == givenName):
+            if(playerName.lower() == givenName):
 
                 playerWeight = x['weight']
                 playerHeight = x['hgt']
@@ -178,6 +178,7 @@ def getMinPoke():
 
 
 def topThree(givenPlayerName):
+    givenPlayerName = givenPlayerName.lower()
     with open('pokemon.json') as f:
         pokedex = json.load(f)
 
@@ -233,7 +234,3 @@ def topThree(givenPlayerName):
     ret.append(minList[1][1])
     ret.append(minList[2][1])
     return ret
-
-givenName = "Jamal Murray"
-print(topThree(givenName))
-print(adjStats(playerStats(givenName)))

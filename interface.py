@@ -34,22 +34,12 @@ def getPokemans():
     # tk.Label(master, text=approvedPokemon).grid(row = 5)
     return
 
-def clearPics():
-    j = 0
-    quantity = len(dynamic_sprites)
-    while j < quantity:
-        dynamic_labels[j].destroy()
-        j+=1
-
-def delete():
-    test.place_forget()
-
 master = tk.Tk()
 
 choice = tk.IntVar()
 tk.Label(master,
         text="""Enter your weight and height or Enter the name of an NBA Player!\nWe will compare you or an NBA Player to a Pokemon!
-        \nYou are anlayzed just by height and weight, but NBA players are analyzed by their basketball stats as well!""",
+        \nYou are analyzed just by height and weight, but NBA players are analyzed by their basketball stats as well!""",
         justify = tk.LEFT,
         padx = 20).grid(row=0)
 
@@ -73,7 +63,7 @@ logo2 = logo2.subsample(8)
 logoImg = tk.Label(master, image=logo).grid(row=1, column=2)
 logoImg2 = tk.Label(master, image=logo2).grid(row=3, column=2)
 
-tk.Label(master, text="Weight (lb)").grid(row=1)
+tk.Label(master, text="Weight (lbs)").grid(row=1)
 tk.Label(master, text="Height (in)").grid(row=2)
 tk.Label(master, text="Name of NBA Player:").grid(row=3)
 
@@ -87,6 +77,5 @@ e3.grid(row=3, column=1)
 
 tk.Button(master, text='Quit', command=master.quit).grid(row=5, column=1, sticky=tk.W, pady=4)
 tk.Button(master, text='Calculate', command=getPokemans).grid(row=4, column=1, sticky=tk.W, pady=4)
-tk.Button(master, text='Clear', command=delete).grid(row=5, column=2, sticky=tk.E, pady=4)
 
 tk.mainloop()
