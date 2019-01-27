@@ -30,7 +30,7 @@ def makePokemon(rating,height,weight):
 
 
 def playerStats(givenName):
-    with open('players.json') as f:
+    with open('players.json', encoding='utf-8') as f:
         players = json.load(f)['players']
         for x in players:
             if('firstName' in x):

@@ -11,7 +11,7 @@ aHeight = (height-1.7)/.06713
 
 #print(aWeight)
 #print(aHeight)
-with open('pokemon.json') as f:
+with open('pokemon.json', encoding='utf-8') as f:
     pokemon = json.load(f)
     count = 0
     approvedPokemon = []
@@ -36,6 +36,3 @@ with open('players.json') as f:
             pprint("Ratings: " + str(x['ratings']))
         except:
             pass
-
-
-
