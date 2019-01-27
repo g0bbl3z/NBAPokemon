@@ -1,6 +1,5 @@
 import json
 
-
 def makePokemon(rating,height,weight):
     reb = rating[0]["reb"]
     end = rating[0]["endu"]
@@ -113,7 +112,7 @@ def getMaxNBA():
                 if stats[stat] > maxStats[stat]:
                     maxStats[stat] = stats[stat]
     return maxStats
-print("MAX: " + str(getMaxNBA()))
+
 
 def getMinNBA():
     minStats = {"hp": 9999999999999990,
@@ -137,8 +136,6 @@ def getMinNBA():
     return minStats
 
 
-print("MIN: " + str(getMinNBA()))
-
 
 def getMaxPoke():
     maxStats = {"hp": 0,
@@ -160,9 +157,6 @@ def getMaxPoke():
     return maxStats
 
 
-print("MAX: " + str(getMaxPoke()))
-
-
 def getMinPoke():
     minStats = {"hp": 9999,
                 "atk": 9999,
@@ -181,9 +175,6 @@ def getMinPoke():
                     if pokedex[pokemon]['baseStats'][stat] < minStats[stat]:
                         minStats[stat] = pokedex[pokemon]['baseStats'][stat]
     return minStats
-
-
-print("MIN: " + str(getMinPoke()))
 
 
 def topThree(givenPlayerName):
@@ -215,30 +206,34 @@ def topThree(givenPlayerName):
     playerStatsats = playerStats(givenPlayerName)
 
     for pokemon in pokedex:
-        if count <= 1008:
-            squaredDiff = 0
-            for stat in stats:
-                adj = (playerStatsats[stat] - NBALOW[stat]) / slopes[stat]
-                squaredDiff += (adj - pokedex[pokemon]['baseStats'][stat])**2
-                #if best
-            if squaredDiff < minList[0][0]:
-                minList[2] = minList[1]
-                minList[1] = minList[0]
-                minList[0] = [squaredDiff, pokemon]
-                #if 2nd
-            elif squaredDiff < minList[1][0]:
-                minList[2] = minList[1]
-                minList[1] = [squaredDiff, pokemon]
-                #if 3rd
-            elif squaredDiff < minList[2][0]:
-                minList[2] = [squaredDiff, pokemon]
-        count += 1
+        try:
+            pokedex[pokemon]["baseSpecies"]
+        except:
+            if count <= 1008:
+                squaredDiff = 0
+                for stat in stats:
+                    adj = (playerStatsats[stat] - NBALOW[stat]) / slopes[stat]
+                    squaredDiff += (adj - pokedex[pokemon]['baseStats'][stat])**2
+
+                    #if best
+                if squaredDiff < minList[0][0]:
+                    minList[2] = minList[1]
+                    minList[1] = minList[0]
+                    minList[0] = [squaredDiff, pokemon]
+                    #if 2nd
+                elif squaredDiff < minList[1][0]:
+                    minList[2] = minList[1]
+                    minList[1] = [squaredDiff, pokemon]
+                    #if 3rd
+                elif squaredDiff < minList[2][0]:
+                    minList[2] = [squaredDiff, pokemon]
+            count += 1
     ret = []
     ret.append(minList[0][1])
     ret.append(minList[1][1])
     ret.append(minList[2][1])
     return ret
 
-givenName = "Trey Lyles"
+givenName = "Jamal Murray"
 print(topThree(givenName))
 print(adjStats(playerStats(givenName)))
