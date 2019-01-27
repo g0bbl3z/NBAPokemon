@@ -37,12 +37,12 @@ def findPokemon(pokedex, rating,height,weight):
     drb = rating[0]
     spe = rating[0]
     jmp = rating[0]
-    healthPoints = int((str+end +reb)/3)
-    attack = int(off+fg + ft)/3
-    deffense = int((weight+defs)/2)
-    specialAttack = int((tp+height+dnk)/3)
-    speed = int((spe+end+drb)/3)
-    specialDefense = int((str+jmp)/2)
+    healthPoints = str*end + reb
+    attack = off*fg + ft
+    deffense = weight*defs
+    specialAttack = tp*height + dnk
+    speed = spe*end*drb
+    specialDefense = str*jmp
 
 
 

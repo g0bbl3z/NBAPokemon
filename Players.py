@@ -25,13 +25,12 @@ with open('pokemon.json') as f:
     #print(len(approvedPokemon))
 
 with open('players.json') as f:
-    players = json.load(f)
-    count = 0
+    players = json.load(f)['players']
     for x in players:
-        while count <= len(players):
-        #pprint(players['players'][0]['hgt'])
-            pprint(players['players'][count]['hgt'])
-            count += 1
+        try:
+            pprint("Name: " + x['name'] + " Weight: " + str(x['weight']) + " Height: " + str(x['hgt']))
+        except:
+            pass
 
 
 
