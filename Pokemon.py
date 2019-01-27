@@ -14,12 +14,12 @@ def makePokemon(rating,height,weight):
     drb = rating[0]["drb"]
     spe = rating[0]["spd"]
     jmp = rating[0]["jmp"]
-    healthPoints = str*end + reb
-    attack = off*fg + ft
-    deffense = weight*defs + spe
-    specialAttack = tp*height + dnk
+    healthPoints = str*end*weight
+    attack = off*fg*ft
+    deffense = weight*defs*spe
+    specialAttack = tp*height*dnk
     speed = spe*end*drb
-    specialDefense = str*jmp
+    specialDefense = str*jmp*reb
     return {"hp" : healthPoints,
             "atk" : attack,
             "def" : deffense,
@@ -99,6 +99,30 @@ def adjStats(givenPlayerStats):
     aStats["tot"] = total
     return aStats
 
+def getMaxNBA():
+    stats = {"hp": 0,
+            "atk": 0,
+            "def": 0,
+            "spa": 0,
+            "spd": 0,
+            "spe": 0,
+            }
+
+
+
+# def getMinNBA():
+
+
+# def getMinPoke():
+
+
+
+# def getMaxPoke():
+
+
+def getStats():
+    return ["hp", "atk", "def", "spa", "spd", "spa"]
+
 
 def topThree(givenPlayerName):
     with open('pokemon.json') as f:
@@ -123,7 +147,7 @@ def topThree(givenPlayerName):
     pokeSpd = 224
     pokeSpe = 175
 
-    stats = ["hp", "atk", "def", "spa", "spd", "spa"]
+    stats = getStats()
 
     lows = {"hp" : hpLow,
             "atk": atkLow,
@@ -165,7 +189,11 @@ def topThree(givenPlayerName):
             elif squaredDiff < minList[2][0]:
                 minList[2] = [squaredDiff, pokemon]
         count += 1
-    return minList
+    ret = []
+    ret.append(minList[0][1])
+    ret.append(minList[1][1])
+    ret.append(minList[2][1])
+    return ret
 
 givenName = "Nikola Jokic"
 print(topThree(givenName))
