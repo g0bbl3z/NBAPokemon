@@ -2,27 +2,47 @@ import json
 import random
 from pprint import pprint
 
+def getPokemonAdjusted(inWeight, inHeight):
+    weight = inWeight
+    height = inHeight
+    aWeight = (weight-60.3278)/.275
+    aHeight = (height-1.7)/.06713
 
-weight = 77
-height = 1.88
-aWeight = (weight-60.3278)/.275
-aHeight = (height-1.7)/.06713
+    print(aWeight)
+    print(aHeight)
+    with open('pokemon.json') as f:
+        pokemon = json.load(f)
+        count = 0
+        approvedPokemon = []
+        for i in pokemon:
+            if count <= 1008:
+                if abs(pokemon[i]['heightm']-aHeight) < .2:
+                    if abs(pokemon[i]['weightkg']-aWeight) < 7:
+                        approvedPokemon.append(i)
+            count += 1
+        pprint(approvedPokemon)
+        print(len(approvedPokemon))
 
+def getPokemon(inWeight, inHeight):
+    weight = inWeight
+    height = inHeight
+    # aWeight = (weight-60.3278)/.275
+    # aHeight = (height-1.7)/.06713
 
-print(aWeight)
-print(aHeight)
-with open('pokemon.json') as f:
-    pokemon = json.load(f)
-    count = 0
-    approvedPokemon = []
-    for i in pokemon:
-        if count <= 1008:
-            if abs(pokemon[i]['heightm']-aHeight) < 1:
-                if abs(pokemon[i]['weightkg']-aWeight) < 1:
-                    approvedPokemon.append(i)
-        count += 1
-    pprint(approvedPokemon)
-    print(len(approvedPokemon))
+    print(weight)
+    print(height)
+    with open('pokemon.json') as f:
+        pokemon = json.load(f)
+        count = 0
+        approvedPokemon = []
+        for i in pokemon:
+            if count <= 1008:
+                if abs(pokemon[i]['heightm']-height) < .2:
+                    if abs(pokemon[i]['weightkg']-weight) < 7:
+                        approvedPokemon.append(i)
+            count += 1
+        pprint(approvedPokemon)
+        print(len(approvedPokemon))
 
 def findPokemon(pokedex, rating,height,weight):
     reb = rating[0]
@@ -43,6 +63,3 @@ def findPokemon(pokedex, rating,height,weight):
     specialAttack = int((tp+height+dnk)/3)
     speed = int((spe+end+drb)/3)
     specialDefense = int((str+jmp)/2)
-
-
-
